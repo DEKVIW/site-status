@@ -96,11 +96,16 @@
           </n-popover>
         </n-flex>
         <!-- 总结 -->
-        <n-flex class="summary" justify="space-between">
-          <n-text class="date" depth="3">
-            {{ formatTime(site?.days?.[0]?.date || 0) }}
-          </n-text>
-          <n-text v-if="site?.down?.times" depth="3">
+        <div class="summary">
+          <!-- 移动端：第一行显示日期和今日 -->
+          <n-flex class="summary-dates" justify="space-between">
+            <n-text class="date" depth="3">
+              {{ formatTime(site?.days?.[0]?.date || 0) }}
+            </n-text>
+            <n-text class="date" depth="3">{{ $t("meta.today") }}</n-text>
+          </n-flex>
+          <!-- 第二行显示统计信息 -->
+          <n-text v-if="site?.down?.times" depth="3" class="summary-stats">
             {{
               $t("card.summaryData", {
                 days: site?.days?.length,
@@ -110,7 +115,7 @@
               })
             }}
           </n-text>
-          <n-text v-else depth="3">
+          <n-text v-else depth="3" class="summary-stats">
             {{
               $t("card.summary", {
                 days: site?.days?.length,
@@ -118,8 +123,7 @@
               })
             }}
           </n-text>
-          <n-text class="date" depth="3">{{ $t("meta.today") }}</n-text>
-        </n-flex>
+        </div>
       </n-card>
     </div>
     <div
@@ -275,6 +279,17 @@ onMounted(getSiteData);
       }
       .n-text {
         font-size: 13px;
+      }
+      
+      // 移动端适配
+      @media (max-width: 768px) {
+        .summary-dates {
+          margin-bottom: 4px;
+        }
+        .summary-stats {
+          font-size: 12px;
+          line-height: 1.4;
+        }
       }
     }
   }
